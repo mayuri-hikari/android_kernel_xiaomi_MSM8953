@@ -30,9 +30,9 @@
 /{
 	mtp_batterydata: qcom,battery-data {
 		qcom,batt-id-range-pct = <15>;
-        	#include "batterydata-coslight-3000mah.dtsi"
-        	#include "batterydata-sunwoda-3000mah.dtsi"
-        	#include "batterydata-share-3000mah.dtsi"
+        	#include "ysl/battery/batterydata-coslight-3000mah.dtsi"
+        	#include "ysl/battery/batterydata-sunwoda-3000mah.dtsi"
+        	#include "ysl/battery/batterydata-share-3000mah.dtsi"
 	};
 };
 
