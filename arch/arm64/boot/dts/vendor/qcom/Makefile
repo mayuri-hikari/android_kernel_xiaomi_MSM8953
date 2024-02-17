@@ -1,4 +1,4 @@
-ifneq ($(CONFIG_MACH_XIAOMI_OXYGEN),y)
+ifneq ($(CONFIG_MACH_XIAOMI_YSL),y)
 
 dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb msm8916-mtp.dtb
 dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-mtp.dtb
