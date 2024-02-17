@@ -18,6 +18,7 @@
 #include "pmi8940.dtsi"
 #include "msm8953-mtp.dtsi"
 #include "msm8953-pmi8940.dtsi"
+#include "ysl/overlay.dtsi"
 
 / {
 	model = "Qualcomm Technologies, Inc. MSM8953 + PMI8940 MTP";
@@ -71,6 +72,5 @@
 		};
 	};
 };
-#include "ysl/overlay.dtsi"
 
 
