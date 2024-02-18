@@ -1359,18 +1359,18 @@ source "drivers/input/touchscreen/nt36xxx/Kconfig"
 source "drivers/input/touchscreen/synaptics_dsx_force/Kconfig"
 source "drivers/input/touchscreen/ft5x46/Kconfig"
 
-config TOUCHSCREEN_GT917D
-       tristate "Goodix touchscreens"
-       depends on I2C
-       help
-         Say Y here if you have a GT917D touchscreen.
-         GT917D controllers are multi touch controllers which can
-         report 10 touches at a time.
+config TOUCHSCREEN_GT917d
+	 tristate "Goodix touchscreens"
+	 depends on I2C
+	 help
+	   Say Y here if you have a GT917d touchscreen.
+	   GT917d controllers are multi touch controllers which can
+	   report 10 touches at a time.
 
-         If unsure, say N.
+	     If unsure, say N.
 
-         To compile this driver as a module, choose M here: the
-         module will be called GT9xx.
+	     To compile this driver as a module, choose M here: the
+	     module will be called GT917d.
 
 source "drivers/input/touchscreen/gt917d/Kconfig"
 
