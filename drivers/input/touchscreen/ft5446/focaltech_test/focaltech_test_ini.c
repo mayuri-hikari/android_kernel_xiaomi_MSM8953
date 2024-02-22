@@ -1,5 +1,5 @@
 /************************************************************************
-* Copyright (C) 2012-2015, Focaltech Systems (R)£¬All Rights Reserved.
+* Copyright (C) 2012-2015, Focaltech Systems (R)ï¿½ï¿½All Rights Reserved.
 *
 * File Name: focaltech_test_ini.c
 *
@@ -42,7 +42,7 @@ int fts_strncmp(const char *cs, const char *ct, size_t count)
 /*************************************************************
 Function:  Get the value of key
 Input: char * filedata; char * section; char * key
-Output: char * value¡¡key
+Output: char * valueï¿½ï¿½key
 Return: 0	   SUCCESS
 		-1	  can not find section
 		-2	  can not find key
@@ -367,7 +367,7 @@ cfg_scts_end:
 }
 
 /*
- * fts_ic_table_get_ic_code_from_ic_name - Get IC NAME£¬From IC CODE
+ * fts_ic_table_get_ic_code_from_ic_name - Get IC NAMEï¿½ï¿½From IC CODE
  */
 unsigned int fts_ic_table_get_ic_code_from_ic_name(char *strIcName)
 {
@@ -508,7 +508,7 @@ unsigned int fts_ic_table_get_ic_code_from_ic_name(char *strIcName)
 }
 
 /*
- * fts_ic_table_get_ic_name_from_ic_code - Get IC CODE£¬From IC NAME
+ * fts_ic_table_get_ic_name_from_ic_code - Get IC CODEï¿½ï¿½From IC NAME
  */
 void fts_ic_table_get_ic_name_from_ic_code(unsigned int ucIcCode, char *strIcName)
 {
@@ -714,7 +714,14 @@ int fts_test_get_ini_size(char *config_name)
 		return -EIO;
 	}
 
-	inode = pfile->f_dentry->d_inode;
+	
+#if 1
+	inode = filp->f_inode;
+#else
+	/* reserved for linux earlier verion */
+	inode = filp->f_dentry->d_inode;
+#endif
+
 	fsize = inode->i_size;
 	filp_close(pfile, NULL);
 
@@ -745,7 +752,12 @@ int fts_test_read_ini_data(char *config_name, char *config_buf)
 		return -EIO;
 	}
 
-	inode = pfile->f_dentry->d_inode;
+#if 1
+	inode = filp->f_inode;
+#else
+	/* reserved for linux earlier verion */
+	inode = filp->f_dentry->d_inode;
+#endif
 	fsize = inode->i_size;
 	old_fs = get_fs();
 	set_fs(KERNEL_DS);
