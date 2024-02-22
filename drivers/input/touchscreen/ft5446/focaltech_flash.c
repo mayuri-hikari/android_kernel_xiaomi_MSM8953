@@ -36,6 +36,7 @@
 #include "focaltech_core.h"
 #include "focaltech_flash.h"
 #include "focaltech_config.h"
+#include "../lct_tp_fm_info.h"
 
 /*****************************************************************************
 * Static variables
@@ -45,28 +46,37 @@
 * Global variable or extern global variabls/functions
 *****************************************************************************/
 /* Upgrade FW/PRAMBOOT/LCD CFG */
-u8 fw_file[] = {
-#include FTS_UPGRADE_FW_FILE
+u8 CTPM_FW[] =
+{
+#include FTS_UPGRADE_FW_APP
 };
 
-u8 fw_file2[] = {
-#include FTS_UPGRADE_FW2_FILE
+#if (FTS_GET_VENDOR_ID_NUM >= 2)
+u8 CTPM_FW2[] =
+{
+#include FTS_UPGRADE_FW2_APP
+};
+#endif
+
+#if (FTS_GET_VENDOR_ID_NUM >= 3)
+u8 CTPM_FW3[] =
+{
+#include FTS_UPGRADE_FW3_APP
+};
+#endif
+
+u8 aucFW_PRAM_BOOT[] =
+{
+#ifdef FTS_UPGRADE_PRAMBOOT
+#include FTS_UPGRADE_PRAMBOOT
+#endif
 };
 
-u8 fw_file3[] = {
-#include FTS_UPGRADE_FW3_FILE
-};
-
-struct upgrade_fw fw_list[] = {
-	{D1S_VENDOR_LD, fw_file, sizeof(fw_file), FTS_VENDOR_INFO},
-	{D1S_VENDOR_LD2, fw_file2, sizeof(fw_file2), FTS_VENDOR_INFO2},
-	{D1S_VENDOR_LD3, fw_file3, sizeof(fw_file3), FTS_VENDOR_INFO3},
-};
-
-struct upgrade_func *upgrade_func_list[] = {
-	&upgrade_func_ft5x46,
-};
-struct fts_upgrade *fwupgrade;
+struct fts_upgrade_fun  fts_updatefun_curr;
+struct workqueue_struct *touch_wq;
+struct work_struct fw_update_work;
+u8 *g_fw_file;
+int g_fw_len;
 /*****************************************************************************
 * Static function prototypes
 *****************************************************************************/
