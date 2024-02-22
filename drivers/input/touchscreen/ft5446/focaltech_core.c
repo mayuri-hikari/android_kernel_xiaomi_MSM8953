@@ -35,6 +35,7 @@
 #include "focaltech_core.h"
 #include "focaltech_flash.h"
 #include <linux/hqsysfs.h>
+#include "../lct_tp_fm_info.h"
 #if defined(CONFIG_FB)
 #include <linux/notifier.h>
 #include <linux/fb.h>
