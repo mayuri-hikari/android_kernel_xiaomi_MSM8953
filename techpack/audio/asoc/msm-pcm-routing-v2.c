@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /* Copyright (c) 2012-2021, The Linux Foundation. All rights reserved.
  * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
- * Copyright (C) 2017 XiaoMi, Inc.
  */
 
 #include <linux/init.h>
@@ -33,9 +32,6 @@
 #include <dsp/q6core.h>
 #include <dsp/q6common.h>
 #include <dsp/audio_cal_utils.h>
-/* SMART_AMP start */
-#include <dsp/smart_amp.h>
-/* SMART_AMP end */
 
 #include "msm-pcm-routing-v2.h"
 #include "msm-pcm-routing-devdep.h"
@@ -289,99 +285,6 @@ static void msm_pcm_routing_deinit_pp(int port_id, int topology)
 		break;
 	}
 }
-
-#ifdef SMART_AMP
-/* SMART_AMP start */
-#define SMARTAMP_CONFIG_SPK_RE  0
-#define SMARTAMP_CONFIG_RCV_RE  1
-#define SMARTAMP_CONFIG_PROFILE 2
-#define SMARTAMP_CONFIG_BINIDX  3
-#define SMARTAMP_CONFIG         9
-
-/*
- * Set profile
- */
-#define AFE_SA_SET_PROFILE		3840
-#define AFE_SA_SET_SPK_RE		3848
-#define AFE_SA_SET_RCV_RE		3849
-#define AFE_SA_SET_BIN_IDX		3841
-
-static int smartamp_set_filter(struct snd_kcontrol *kcontrol,
-			       struct snd_ctl_elem_value *ucontrol)
-{
-	int32_t ret = 0;
-	int32_t pid = 0;
-
-	struct soc_mixer_control *mc = (struct soc_mixer_control *)kcontrol->private_value;
-
-	u8 buff[56];
-	u8 *ptr = buff;
-
-	((int32_t *)buff)[0] = ucontrol->value.integer.value[0];
-
-	pr_info("SmartAmp: %s %ld %ld\n", __func__, ucontrol->value.integer.value[0], ucontrol->value.integer.value[1]);
-	switch (mc->shift) {
-	case SMARTAMP_CONFIG_SPK_RE:
-		pid = AFE_SA_SET_SPK_RE;
-		break;
-	case SMARTAMP_CONFIG_RCV_RE:
-		pid = AFE_SA_SET_RCV_RE;
-		break;
-	case SMARTAMP_CONFIG_PROFILE:
-		pid = AFE_SA_SET_PROFILE;
-		break;
-	case SMARTAMP_CONFIG_BINIDX:
-		pid = AFE_SA_SET_BIN_IDX;
-		break;
-	default:
-		pr_info("SmartAmp: wrong %s prints\n", __func__);
-		break;
-	}
-	smartamp_get_set(pid, sizeof(buff), 0, ptr);
-	return ret;
-}
-
-static int smartamp_get_filter(struct snd_kcontrol *kcontrol,
-			       struct snd_ctl_elem_value *ucontrol)
-{
-	int32_t ret = 0;
-	struct soc_mixer_control *mc = (struct soc_mixer_control *)kcontrol->private_value;
-
-	pr_info("SmartAmp: %s", __func__);
-	switch (mc->shift) {
-	case SMARTAMP_CONFIG_SPK_RE:
-	case SMARTAMP_CONFIG_RCV_RE:
-	case SMARTAMP_CONFIG_PROFILE:
-		pr_info("SmartAmp: TODO: implement this\n");
-		break;
-	default:
-		pr_info("SmartAmp: wrong %s prints\n", __func__);
-		break;
-	}
-
-	return ret;
-}
-
-static const struct snd_kcontrol_new smartamp_filter_mixer_controls[] = {
-	SOC_SINGLE_EXT("SmartAmp Spk Re", SMARTAMP_CONFIG, SMARTAMP_CONFIG_SPK_RE, 1000000, 0, smartamp_get_filter, smartamp_set_filter),
-	SOC_SINGLE_EXT("SmartAmp Rcv Re", SMARTAMP_CONFIG, SMARTAMP_CONFIG_RCV_RE, 1000000, 0, smartamp_get_filter, smartamp_set_filter),
-	SOC_SINGLE_EXT("SmartAmp Profile", SMARTAMP_CONFIG, SMARTAMP_CONFIG_PROFILE, 1000000, 0, smartamp_get_filter, smartamp_set_filter),
-	SOC_SINGLE_EXT("SmartAmp SpkId", SMARTAMP_CONFIG, SMARTAMP_CONFIG_BINIDX, 1000000, 0, smartamp_get_filter, smartamp_set_filter)
-};
-
-int afe_smartamp_algo_ctrl(u8 *data, u32 param_id, u8 dir, u8 size, u8 slave_id)
-{
-	int32_t ret = 0;
-	pr_info("smartamp: @begin %s \n", __func__);
-
-	mutex_lock(&routing_lock);
-	ret = smartamp_get_set(param_id, size, dir, data);
-	pr_info("smartamp: get/set filter %d \n", dir);
-	mutex_unlock(&routing_lock);
-	return 0;
-}
-/* SMART_AMP end */
-#endif
 
 static void msm_pcm_routng_cfg_matrix_map_pp(struct route_payload payload,
 					     int path_type, int perf_mode)
@@ -25109,11 +25012,7 @@ static const struct snd_soc_dapm_widget msm_qdsp6_widgets_mi2s[] = {
 	SND_SOC_DAPM_AIF_IN("SEN_MI2S_DL_HL",
 		"Senary MI2S_RX Hostless Playback",
 		0, 0, 0, 0),
-	SND_SOC_DAPM_AIF_IN("QUIN_MI2S_DL_HL", "QUIN MI2S_RX Hostless Playback",
-		0, 0, 0, 0),
 
-	SND_SOC_DAPM_AIF_OUT("QUIN_MI2S_UL_HL", "QUIN MI2S_TX Hostless Capture",
-		0, 0, 0, 0),
 	SND_SOC_DAPM_AIF_OUT("MI2S_UL_HL", "MI2S_TX_HOSTLESS Capture",
 		0, 0, 0, 0),
 	SND_SOC_DAPM_AIF_OUT("INT3_MI2S_UL_HL",
@@ -30479,7 +30378,6 @@ static const struct snd_soc_dapm_route intercon_mi2s[] = {
 	{"PRI_MI2S_RX", NULL, "PRI_MI2S_DL_HL"},
 	{"TERT_MI2S_RX", NULL, "TERT_MI2S_DL_HL"},
 	{"QUAT_MI2S_UL_HL", NULL, "QUAT_MI2S_TX"},
-	{"QUIN_MI2S_UL_HL", NULL, "QUIN_MI2S_TX"},
 
 	{"INT0_MI2S_RX Port Mixer", "PRI_MI2S_TX", "PRI_MI2S_TX"},
 	{"INT0_MI2S_RX Port Mixer", "SEC_MI2S_TX", "SEC_MI2S_TX"},
@@ -31684,11 +31582,6 @@ static int msm_routing_probe(struct snd_soc_component *component)
 				      ARRAY_SIZE(pll_clk_drift_controls));
 	snd_soc_add_component_controls(component, mclk_src_controls,
 				      ARRAY_SIZE(mclk_src_controls));
-#ifdef SMART_AMP
-	/* SMART_AMP start */
-	snd_soc_add_component_controls(component, smartamp_filter_mixer_controls, ARRAY_SIZE(smartamp_filter_mixer_controls));
-	/*SMART_AMP end */
-#endif
 
 	return 0;
 }
