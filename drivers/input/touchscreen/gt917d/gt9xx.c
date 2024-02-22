@@ -26,6 +26,12 @@
 #include "gt9xx.h"
 #include <linux/hqsysfs.h>
 
+#include "../lct_tp_fm_info.h"
+#ifdef SUPPORT_READ_TP_VERSION
+	char product_id[GTP_PRODUCT_ID_MAXSIZE];
+	char fw_version[64];
+#endif
+
 #define GOODIX_COORDS_ARR_SIZE	4
 #define PROP_NAME_SIZE		24
 #define I2C_MAX_TRANSFER_SIZE   255
