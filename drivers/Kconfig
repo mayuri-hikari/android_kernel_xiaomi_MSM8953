@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: GPL-2.0
 menu "Device Drivers"
 
+source "drivers/input/Kconfig"
+
 source "drivers/amba/Kconfig"
 
 source "drivers/base/Kconfig"
@@ -51,7 +53,7 @@ source "drivers/lightnvm/Kconfig"
 
 # input before char - char/joystick depends on it. As does USB.
 
-source "drivers/input/Kconfig"
+
 
 source "drivers/char/Kconfig"
 
