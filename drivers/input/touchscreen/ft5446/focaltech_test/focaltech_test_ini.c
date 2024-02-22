@@ -716,7 +716,7 @@ int fts_test_get_ini_size(char *config_name)
 
 	
 #if 1
-	inode = filp->f_inode;
+	inode = pfile->f_inode;
 #else
 	/* reserved for linux earlier verion */
 	inode = filp->f_dentry->d_inode;
@@ -753,7 +753,7 @@ int fts_test_read_ini_data(char *config_name, char *config_buf)
 	}
 
 #if 1
-	inode = filp->f_inode;
+	inode = pfile->f_inode;
 #else
 	/* reserved for linux earlier verion */
 	inode = filp->f_dentry->d_inode;
