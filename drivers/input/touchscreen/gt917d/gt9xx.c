@@ -2908,7 +2908,6 @@ void gtp_esd_off(struct goodix_ts_data *ts)
 bool gtp_get_charger_status(void)
 {
 	bool *g_chargerState = NULL;
-	g_chargerState = check_charge_mode();
 	return *g_chargerState;
 }
 static void gtp_charger_updateconfig(struct goodix_ts_data *ts , s32 dir_update)
