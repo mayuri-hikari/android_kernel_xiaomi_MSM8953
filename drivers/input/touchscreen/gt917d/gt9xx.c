@@ -1738,7 +1738,7 @@ void ctp_vendor_info(struct i2c_client *client, struct goodix_fw_info *gt_fw_inf
 		sprintf(temp, "%x", fw_info->cfg_ver);
 		strcat(tp_info_summary, temp);
 		strcat(tp_info_summary, "\0");
-		hq_regiser_hw_info(HWID_CTP, tp_info_summary);
+		
 }
 
 /**
@@ -2905,7 +2905,6 @@ void gtp_esd_off(struct goodix_ts_data *ts)
 }
 
 #if GTP_CHARGER_SWITCH /*gexiantao@20180403*/
-extern bool *check_charge_mode(void);
 bool gtp_get_charger_status(void)
 {
 	bool *g_chargerState = NULL;
